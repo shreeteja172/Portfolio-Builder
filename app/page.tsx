@@ -698,5 +698,3 @@ export default function Home() {
     </div>
   )
 }
-
-/* Add these styles to your global.css or as a style tag in your component */
