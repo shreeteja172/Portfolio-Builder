@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { downloadPortfolio } from "@/utils/download";
+import { downloadPortfolio } from "@/utils.ts/download";
 import { motion } from "framer-motion";
 
 // Define the type for portfolio templates
