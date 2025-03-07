@@ -248,7 +248,7 @@ export default function Home() {
           </Dialog>
           <div className="hidden md:flex items-center gap-2 mr-4">
             <div className="w-2 h-2 rounded-full bg-green-500"></div>
-            <span className="text-xs text-white/70">1,234 users online</span>
+            {/* <span className="text-xs text-white/70">1,234 users online</span> */}
           </div>
         </div>
       </header>
