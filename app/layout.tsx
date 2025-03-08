@@ -1,4 +1,4 @@
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from "react-hot-toast";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
@@ -16,7 +16,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Portfolio Builder | Create Amazing Portfolios",
-  description: "Build and customize professional portfolios with our easy-to-use platform",
+  description:
+    "Build and customize professional portfolios with our easy-to-use platform",
   icons: {
     icon: "/favicon.ico",
   },
@@ -29,43 +30,48 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      // In layout.tsx
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
+      >
+        <Toaster position="bottom-right" />
+        {/* rest of your body content */}
 
-// Add this inside your body tag
-<body
-  className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
->
-  <Toaster position="bottom-right" />
-  {/* rest of your body content */}
-      
         <header className="sticky top-0 z-50 backdrop-blur-md bg-background/70 border-b border-white/10">
           <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-            <Link href="/" className="text-xl font-bold tracking-tight glow-text">
+            <Link
+              href="/"
+              className="text-xl font-bold tracking-tight glow-text"
+            >
               Portfolio<span className="text-blue-500">Builder</span>
             </Link>
             <nav className="hidden md:flex space-x-6">
-              <Link href="/templates" className="hover:text-blue-400 transition-colors">
+              <Link
+                href="/templates"
+                className="hover:text-blue-400 transition-colors"
+              >
                 Templates
               </Link>
-              <Link href="/portfolio/1" className="hover:text-blue-400 transition-colors">
+              <Link
+                href="/portfolio/1"
+                className="hover:text-blue-400 transition-colors"
+              >
                 Preview
               </Link>
-              <Link href="/dashboard" className="hover:text-blue-400 transition-colors">
+              <Link
+                href="/dashboard"
+                className="hover:text-blue-400 transition-colors"
+              >
                 Dashboard
               </Link>
             </nav>
             <div className="md:hidden">
               {/* Mobile menu button would go here */}
-              <button className="text-foreground">
-                Menu
-              </button>
+              <button className="text-foreground">Menu</button>
             </div>
           </div>
         </header>
 
-        <main className="flex-grow">
-          {children}
-        </main>
+        <main className="flex-grow">{children}</main>
 
         <footer className="mt-auto border-t border-white/10 py-8">
           <div className="container mx-auto px-4">
@@ -73,15 +79,37 @@ export default function RootLayout({
               <div>
                 <h3 className="font-bold mb-3">Portfolio Builder</h3>
                 <p className="text-sm opacity-70">
-                  Create impressive portfolios in minutes with our customizable templates.
+                  Create impressive portfolios in minutes with our customizable
+                  templates.
                 </p>
               </div>
               <div>
                 <h3 className="font-bold mb-3">Quick Links</h3>
                 <ul className="space-y-2 text-sm">
-                  <li><Link href="/templates" className="hover:text-blue-400 transition-colors">Browse Templates</Link></li>
-                  <li><Link href="/features" className="hover:text-blue-400 transition-colors">Features</Link></li>
-                  <li><Link href="/faq" className="hover:text-blue-400 transition-colors">FAQs</Link></li>
+                  <li>
+                    <Link
+                      href="/templates"
+                      className="hover:text-blue-400 transition-colors"
+                    >
+                      Browse Templates
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/features"
+                      className="hover:text-blue-400 transition-colors"
+                    >
+                      Features
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/faq"
+                      className="hover:text-blue-400 transition-colors"
+                    >
+                      FAQs
+                    </Link>
+                  </li>
                 </ul>
               </div>
               <div>
@@ -100,7 +128,8 @@ export default function RootLayout({
               </div>
             </div>
             <div className="mt-8 pt-6 border-t border-white/10 text-center text-sm opacity-70">
-              © {new Date().getFullYear()} Portfolio Builder. All rights reserved.
+              © {new Date().getFullYear()} Portfolio Builder. All rights
+              reserved.
             </div>
           </div>
         </footer>
