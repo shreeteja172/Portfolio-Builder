@@ -905,7 +905,7 @@ export default function Home() {
                 color: "from-purple-500/30 to-pink-500/30",
                 linkedinId: "/",
                 githubId: "/",
-                image: "",
+                image: "https://avatars.githubusercontent.com/u/",
               },
               {
                 name: "Dhanush",
@@ -913,7 +913,7 @@ export default function Home() {
                 color: "from-green-500/30 to-teal-500/30",
                 linkedinId: "/",
                 githubId: "/",
-                image: "",
+                image: "https://avatars.githubusercontent.com/u/",
               },
               {
                 name: "Sreeja",
@@ -921,7 +921,7 @@ export default function Home() {
                 color: "from-orange-500/30 to-red-500/30",
                 linkedinId: "/",
                 githubId: "/",
-                image: "",
+                image: "https://avatars.githubusercontent.com/u/",
               },
             ].map((member, index) => (
               <motion.div
@@ -938,7 +938,7 @@ export default function Home() {
                       src={member.image}
                       height="200"
                       width="200"
-                      alt="image"
+                      alt=""
                       className="rounded-full"
                     />
                   </div>
