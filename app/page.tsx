@@ -1,5 +1,7 @@
 "use client"
 
+import { toast } from "react-hot-toast";
+import { generatePortfolios, UserData, GeneratedPortfolio } from "@/services/api";
 import { useState, useRef } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -44,6 +46,26 @@ const portfolioOptions = [
 ]
 
 // Animation variants
+// Around line 48, update from:
+const [generatedPortfolios, setGeneratedPortfolios] = useState<GeneratedPortfolio[]>([])
+const [isGenerating, setIsGenerating] = useState<boolean>(false)
+const [error, setError] = useState<string | null>(null)
+
+export default function Home() {
+  // Move all useState declarations here
+  const [generatedPortfolios, setGeneratedPortfolios] = useState<GeneratedPortfolio[]>([])
+  const [isGenerating, setIsGenerating] = useState<boolean>(false)
+  const [error, setError] = useState<string | null>(null)
+  const [currentStep, setCurrentStep] = useState(1)
+  
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: zodResolver(schema),
+  })
+  // Animation variants - keep these outside the component
 const containerVariants = {
   hidden: { opacity: 0 },
   show: {
@@ -59,30 +81,40 @@ const itemVariants = {
   show: { opacity: 1, y: 0 },
 }
 
-export default function Home() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm({
-    resolver: zodResolver(schema),
-  })
+// export default function Home() {
+//   // Component code...
+// }
+//   // Rest of your component...
+// }
 
-  const [generatedPortfolios, setGeneratedPortfolios] = useState<string[]>([])
-  const [currentStep, setCurrentStep] = useState(1)
+  // const [generatedPortfolios, setGeneratedPortfolios] = useState<string[]>([])
+  // const [currentStep, setCurrentStep] = useState(1)
 
   const featuredRef = useRef(null)
   const featuredInView = useInView(featuredRef, { once: true, margin: "-100px" })
 
-  const onSubmit = async (data: any) => {
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    console.log("Generating portfolios for:", data)
-
-    // Use portfolio template IDs
-    setGeneratedPortfolios(["1", "2", "3"])
-    setCurrentStep(2)
-  }
+  const onSubmit = async (data: UserData) => {
+    try {
+      setIsGenerating(true);
+      setError(null);
+      
+      // Call your API to generate portfolios
+      const portfolios = await generatePortfolios(data);
+      
+      // Update state with the returned portfolios
+      setGeneratedPortfolios(portfolios);
+      setCurrentStep(2);
+      
+      // Show success message
+      toast.success("Successfully generated 3 portfolio designs!");
+    } catch (err) {
+      console.error("Error generating portfolios:", err);
+      setError("Failed to generate portfolios. Please try again.");
+      toast.error("Failed to generate portfolios");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   return (
     <div className="min-h-screen">
@@ -444,31 +476,97 @@ export default function Home() {
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                    {portfolioOptions.map((portfolio) => (
-                      <motion.div
-                        key={portfolio.id}
-                        whileHover={{ scale: 1.03 }}
-                        className="glass-effect rounded-lg overflow-hidden"
-                      >
-                        <div className="h-40 bg-gradient-to-br from-blue-600 to-purple-600 relative">
-                          {/* This would be an actual image in production */}
-                          <div className="absolute inset-0 flex items-center justify-center text-lg font-bold">
-                            {portfolio.name}
-                          </div>
-                        </div>
-                        <div className="p-4">
-                          <h4 className="font-medium mb-1">{portfolio.name}</h4>
-                          <p className="text-sm opacity-70 mb-4">{portfolio.description}</p>
-                          <Link
-                            href={`/portfolio/${portfolio.id}`}
-                            className="block w-full py-2 bg-white/10 hover:bg-white/20 rounded text-center transition-colors"
-                          >
-                            View Portfolio
-                          </Link>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
+  {isGenerating ? (
+    // Loading state - shows 3 skeleton cards
+    Array(3).fill(0).map((_, index) => (
+      <motion.div
+        key={`loading-${index}`}
+        className="glass-effect rounded-lg overflow-hidden"
+      >
+        <div className="h-40 bg-gradient-to-br from-blue-600/30 to-purple-600/30 flex items-center justify-center">
+          <svg className="animate-spin h-10 w-10 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </div>
+        <div className="p-4 animate-pulse">
+          <div className="h-4 bg-white/10 rounded w-3/4 mb-2"></div>
+          <div className="h-3 bg-white/10 rounded w-full mb-4"></div>
+          <div className="h-8 bg-white/10 rounded w-full"></div>
+        </div>
+      </motion.div>
+    ))
+  ) : error ? (
+    // Error state
+    <div className="col-span-3 text-center p-6 glass-effect">
+      <p className="text-red-400 mb-4">{error}</p>
+      <Button 
+        onClick={() => setCurrentStep(1)} 
+        className="bg-white/10 hover:bg-white/20"
+      >
+        Try Again
+      </Button>
+    </div>
+  ) : generatedPortfolios.length > 0 ? (
+    // Display generated portfolios from API
+    generatedPortfolios.map((portfolio) => (
+      <motion.div
+        key={portfolio.id}
+        whileHover={{ scale: 1.03 }}
+        className="glass-effect rounded-lg overflow-hidden"
+      >
+        <div className="h-40 bg-gradient-to-br from-blue-600 to-purple-600 relative">
+          {portfolio.previewImage ? (
+            <img 
+              src={portfolio.previewImage} 
+              alt={portfolio.name} 
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center text-lg font-bold">
+              {portfolio.name}
+            </div>
+          )}
+        </div>
+        <div className="p-4">
+          <h4 className="font-medium mb-1">{portfolio.name}</h4>
+          <p className="text-sm opacity-70 mb-4">{portfolio.description}</p>
+          <Link
+            href={`/portfolio/${portfolio.id}`}
+            className="block w-full py-2 bg-white/10 hover:bg-white/20 rounded text-center transition-colors"
+          >
+            View Portfolio
+          </Link>
+        </div>
+      </motion.div>
+    ))
+  ) : (
+    // Fallback to show template options if no generated portfolios yet
+    portfolioOptions.map((portfolio) => (
+      <motion.div
+        key={portfolio.id}
+        whileHover={{ scale: 1.03 }}
+        className="glass-effect rounded-lg overflow-hidden"
+      >
+        <div className="h-40 bg-gradient-to-br from-blue-600 to-purple-600 relative">
+          <div className="absolute inset-0 flex items-center justify-center text-lg font-bold">
+            {portfolio.name}
+          </div>
+        </div>
+        <div className="p-4">
+          <h4 className="font-medium mb-1">{portfolio.name}</h4>
+          <p className="text-sm opacity-70 mb-4">{portfolio.description}</p>
+          <Link
+            href={`/portfolio/${portfolio.id}`}
+            className="block w-full py-2 bg-white/10 hover:bg-white/20 rounded text-center transition-colors"
+          >
+            View Portfolio
+          </Link>
+        </div>
+      </motion.div>
+    ))
+  )}
+</div>
                 </motion.div>
               )}
             </AnimatePresence>

@@ -1,3 +1,4 @@
+import { Toaster } from 'react-hot-toast';
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
@@ -28,9 +29,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
-      >
+      // In layout.tsx
+
+// Add this inside your body tag
+<body
+  className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
+>
+  <Toaster position="bottom-right" />
+  {/* rest of your body content */}
+      
         <header className="sticky top-0 z-50 backdrop-blur-md bg-background/70 border-b border-white/10">
           <div className="container mx-auto px-4 py-4 flex justify-between items-center">
             <Link href="/" className="text-xl font-bold tracking-tight glow-text">
