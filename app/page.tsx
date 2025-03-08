@@ -24,7 +24,8 @@ import {
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
-// import { Github, Linkedin } from "lucide-react"
+import { Github, Linkedin } from "lucide-react";
+import Image from "next/image";
 
 const schema = z.object({
   name: z.string().min(2, "Name is required"),
@@ -894,21 +895,33 @@ export default function Home() {
                 name: "Shreeteja",
                 role: "Full Stack Developer",
                 color: "from-blue-500/30 to-cyan-500/30",
+                linkedinId: "https://linkedin.com/in/shreeteja172",
+                githubId: "https://github.com/shreeteja172",
+                image: "https://avatars.githubusercontent.com/u/176574652?v=4",
               },
               {
                 name: "Akash",
                 role: "UI/UX Designer",
                 color: "from-purple-500/30 to-pink-500/30",
+                linkedinId: "/",
+                githubId: "/",
+                image: "",
               },
               {
                 name: "Dhanush",
                 role: "Backend Engineer",
                 color: "from-green-500/30 to-teal-500/30",
+                linkedinId: "/",
+                githubId: "/",
+                image: "",
               },
               {
                 name: "Sreeja",
                 role: "Project Manager",
                 color: "from-orange-500/30 to-red-500/30",
+                linkedinId: "/",
+                githubId: "/",
+                image: "",
               },
             ].map((member, index) => (
               <motion.div
@@ -921,24 +934,52 @@ export default function Home() {
                   className={`h-48 bg-gradient-to-br ${member.color} flex items-center justify-center`}
                 >
                   <div className="w-24 h-24 rounded-full bg-white/10 flex items-center justify-center text-3xl font-bold">
-                    {member.name.charAt(0)}
+                    <Image
+                      src={member.image}
+                      height="200"
+                      width="200"
+                      alt="image"
+                      className="rounded-full"
+                    />
                   </div>
                 </div>
                 <div className="p-5 text-center">
                   <h3 className="text-xl font-semibold mb-1">{member.name}</h3>
-                  <p className="text-sm opacity-70 mb-4">{member.role}</p>
+                  <p className="text-sm opacity-70 mb-3">{member.role}</p>
+
+                  {/* Display GitHub and LinkedIn IDs */}
+                  {/* <div className="mb-4 text-xs">
+                    <p className="opacity-70 flex items-center justify-center gap-1 mb-1">
+                      <Github size={12} /> {member.githubId}
+                    </p>
+                    <p className="opacity-70 flex items-center justify-center gap-1">
+                      <Linkedin size={12} /> {member.linkedinId}
+                    </p>
+                  </div> */}
+
                   <div className="flex justify-center gap-4">
                     <a
-                      href="#"
+                      href={member.githubId}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="text-white/70 hover:text-white transition-colors"
                     >
-                      {/* <Github size={18} /> */}
+                      <img
+                        src="/github.png"
+                        alt="GitHub"
+                        className="w-14 h-8"
+                      />
                     </a>
                     <a
-                      href="#"
+                      href={member.linkedinId}
+                      rel="noopener noreferrer"
                       className="text-white/70 hover:text-white transition-colors"
                     >
-                      {/* <Linkedin size={18} /> */}
+                      <img
+                        src="/linkedinnew.png"
+                        alt="LinkedIn"
+                        className="w-8 h-8"
+                      />
                     </a>
                   </div>
                 </div>
